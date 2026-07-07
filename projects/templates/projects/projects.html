@@ -1,0 +1,79 @@
+{% extends 'main.html' %} {% block content %}
+
+<!-- SEARCH FORM -->
+<section class="hero-section text-center">
+  <div class="container container--narrow">
+    <form
+      id="searchForm"
+      class="form"
+      action="{% url 'projects' %}"
+      method="GET"
+    >
+      <div class="form__field">
+        <label for="formInput#search">Search Projects</label>
+        <input
+          class="input input--text"
+          id="formInput#search"
+          type="text"
+          name="search_query"
+          value="{{ search_query }}"
+          placeholder="Search projects..."
+        />
+      </div>
+
+      <input class="btn btn--sub btn--lg" type="submit" value="Search" />
+    </form>
+  </div>
+</section>
+
+<!-- PROJECT LIST -->
+<section class="projectsList">
+  <div class="container">
+    <div class="grid grid--three">
+      {% for project in queryset %}
+      <div class="column">
+        <div class="card project">
+          {% if project.id %}
+  <a href="{% url 'project' project.id %}" class="project">
+{% else %}
+  <a href="#" class="project">
+{% endif %}
+            <img
+              class="project__thumbnail"
+              src="{{ project.imageURL }}"
+              alt="project thumbnail"
+            />
+
+            <div class="card__body">
+              <h3 class="project__title">{{ project.title }}</h3>
+
+              <p>
+                {% if project.owner %}
+                <a
+                  class="project__author"
+                  href="{% url 'user-profile' project.owner.id %}"
+                >
+                  By {{ project.owner.name }}
+                </a>
+                {% else %}
+                <span class="project__author"> By Unknown </span>
+                {% endif %}
+              </p>
+
+              <p class="project--rating">
+                <span style="font-weight: bold">
+                  {{ project.vote_ratio }}%
+                </span>
+                Positive Feedback ({{ project.vote_total }} Vote{{ project.vote_total|pluralize }})
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- PAGINATION -->
+{% include 'pagination.html' %} {% endblock content %}
