@@ -1,4 +1,6 @@
-{% extends 'main.html' %} {% block content %}
+{% extends 'main.html' %}
+
+{% block content %}
 
 <!-- Main Section -->
 <main class="settingsPage profile my-md">
@@ -7,11 +9,19 @@
       <div class="column column--1of3">
         <div class="card text-center">
           <div class="card__body dev">
+
             <a
               class="tag tag--pill tag--main settings__btn"
               href="{% url 'edit-account' %}"
             >
               <i class="im im-edit"></i> Edit
+            </a>
+
+            <a
+              class="tag tag--pill tag--main settings__btn"
+              href="{% url 'inbox' %}"
+            >
+              Inbox {% if unreadCount > 0 %}({{unreadCount}}){% endif %}
             </a>
 
             <img
@@ -34,7 +44,9 @@
                   <i class="im im-github"></i>
                 </a>
               </li>
-              {% endif %} {% if profile.social_twitter %}
+              {% endif %}
+
+              {% if profile.social_twitter %}
               <li>
                 <a
                   title="Twitter"
@@ -44,7 +56,9 @@
                   <i class="im im-twitter"></i>
                 </a>
               </li>
-              {% endif %} {% if profile.social_linkedin %}
+              {% endif %}
+
+              {% if profile.social_linkedin %}
               <li>
                 <a
                   title="LinkedIn"
@@ -54,7 +68,9 @@
                   <i class="im im-linkedin"></i>
                 </a>
               </li>
-              {% endif %} {% if profile.social_website %}
+              {% endif %}
+
+              {% if profile.social_website %}
               <li>
                 <a
                   title="Personal Website"
@@ -93,7 +109,6 @@
           <tr>
             <td class="settings__tableInfo">
               <h4>{{skill.name}}</h4>
-
               <p>{{skill.description}}</p>
             </td>
 
@@ -139,7 +154,9 @@
             </td>
 
             <td class="settings__tableInfo">
-              <a href="{% url 'project' project.id %}"> {{project.title}} </a>
+              <a href="{% url 'project' project.id %}">
+                {{project.title}}
+              </a>
 
               <p>{{project.description|slice:"150"}}</p>
             </td>
@@ -163,6 +180,7 @@
           </tr>
           {% endfor %}
         </table>
+
       </div>
     </div>
   </div>
