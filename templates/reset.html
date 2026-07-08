@@ -1,0 +1,47 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<main class="singleForm my-xl">
+    <div class="container">
+        <div class="layout">
+            <div class="column column--1of1">
+                <div class="card text-center">
+                    <div class="card__body">
+
+                        <h3>Enter New Password</h3>
+
+                        <p>Please enter your new password twice.</p>
+
+                        <form method="POST">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+
+                            <input
+                                class="btn btn--sub btn--lg my-md"
+                                type="submit"
+                                value="Update Password"
+                            />
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+input[type='text'],
+input[type='email'],
+input[type='password']{
+  min-height: 4.5rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  border: none;
+  width: 100%;
+  background: var(--color-bg);
+}
+</style>
+
+{% endblock %}

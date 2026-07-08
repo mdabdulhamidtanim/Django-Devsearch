@@ -65,20 +65,26 @@
         />
       </div>
 
-      <div class="form__field">
-        <label for="formInput#password">Password: </label>
-        <input
-          class="input input--password"
-          id="formInput#password"
-          type="password"
-          name="password"
-          placeholder="••••••••"
-        />
-      </div>
+     <div class="form__field">
+  <label for="formInput#password">Password: </label>
+  <input
+    class="input input--password"
+    id="formInput#password"
+    type="password"
+    name="password"
+    placeholder="••••••••"
+  />
+</div>
 
-      <div class="auth__actions">
-        <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
-      </div>
+<p>
+  <a href="{% url 'reset_password' %}">
+    Forgot Password?
+  </a>
+</p>
+
+<div class="auth__actions">
+  <input class="btn btn--sub btn--lg" type="submit" value="Log In" />
+</div>
     </form>
 
     <div class="auth__alternative">
