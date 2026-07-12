@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings
 
 from .forms import (
     CustomUserCreationForm,
@@ -78,10 +80,29 @@ def registerUser(request):
             user.username = user.username.lower()
             user.save()
 
-            messages.success(
+            try:
+                send_mail(
+                subject='Welcome to DevSearch',
+                message=f'''
+Hello {user.username},
+
+Welcome to DevSearch!
+
+Your account has been created successfully.
+
+Thank you for joining.
+            ''',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[user.email],
+            fail_silently=False,
+        )
+            except Exception as e:
+             print(f"Email Error: {e}")
+
+             messages.success(
                 request,
                 'User account was created!'
-            )
+    )
 
             login(request, user)
             return redirect('edit-account')
