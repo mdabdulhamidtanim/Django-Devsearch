@@ -3,8 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.core.mail import send_mail
-from django.conf import settings
+
 import os
 import resend
 
@@ -82,46 +81,37 @@ def registerUser(request):
             user.username = user.username.lower()
             user.save()
 
+            # Send welcome email via Resend
             try:
-                send_mail(
-                    'Welcome to DevSearch',
-                     f'Hello {user.username}, welcome to DevSearch!',
-                    settings.EMAIL_HOST_USER,
-                    [user.email],
-                    fail_silently=False,
-                )
+                resend.api_key = os.getenv("RESEND_API_KEY")
+
+                resend.Emails.send({
+                    "from": "onboarding@resend.dev",
+                    "to": [user.email],
+                    "subject": "Welcome to DevSearch",
+                    "html": f"""
+                    <h2>Welcome to DevSearch</h2>
+
+                    <p>Hello {user.username},</p>
+
+                    <p>Your account has been created successfully.</p>
+
+                    <p>Thank you for joining DevSearch.</p>
+                    """
+                })
+
                 print("EMAIL SENT SUCCESSFULLY")
+
             except Exception as e:
                 print(f"EMAIL ERROR: {e}")
 
-                try:
-                    resend.api_key = os.getenv("RESEND_API_KEY")
+            messages.success(
+                request,
+                'User account was created!'
+            )
 
-                    resend.Emails.send({
-                        "from": "onboarding@resend.dev",
-                        "to": [user.email],
-                        "subject": "Welcome to DevSearch",
-                        "html": f"""
-                        <h2>Welcome to DevSearch</h2>
-
-                        <p>Hello {user.username},</p>
-
-                        <p>Your account has been created successfully.</p>
-
-                        <p>Thank you for joining DevSearch.</p>
-                        """
-                    })
-
-                except Exception as e:
-                    print("EMAIL ERROR:", e)
-
-                messages.success(
-                    request,
-                    'User account was created!'
-                )
-
-                login(request, user)
-                return redirect('edit-account')
+            login(request, user)
+            return redirect('edit-account')
 
         else:
             messages.error(
