@@ -82,30 +82,23 @@ def registerUser(request):
 
             try:
                 send_mail(
-                subject='Welcome to DevSearch',
-                message=f'''
-Hello {user.username},
-
-Welcome to DevSearch!
-
-Your account has been created successfully.
-
-Thank you for joining.
-            ''',
-            from_email=settings.EMAIL_HOST_USER,
-            recipient_list=[user.email],
-            fail_silently=False,
-        )
+                    'Welcome to DevSearch',
+                     f'Hello {user.username}, welcome to DevSearch!',
+                    settings.EMAIL_HOST_USER,
+                    [user.email],
+                    fail_silently=False,
+                )
+                print("EMAIL SENT SUCCESSFULLY")
             except Exception as e:
-             print(f"Email Error: {e}")
+                print(f"EMAIL ERROR: {e}")
 
-             messages.success(
-                request,
-                'User account was created!'
-    )
+                messages.success(
+                    request,
+                    'User account was created!'
+                )
 
-            login(request, user)
-            return redirect('edit-account')
+                login(request, user)
+                return redirect('edit-account')
 
         else:
             messages.error(
