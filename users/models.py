@@ -94,12 +94,12 @@ class Profile(models.Model):
         editable=False
     )
 
-   @property
-def imageURL(self):
-    try:
-        return self.profile_image.url
-    except:
-        return '/static/images/profiles/user-default.png'
+    @property
+    def imageURL(self):
+        try:
+           return self.profile_image.url
+        except:
+           return '/static/images/profiles/user-default.png'
 
     def __str__(self):
         return str(self.username)
