@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
+import os
+import resend
 
 from .forms import (
     CustomUserCreationForm,
@@ -91,6 +93,27 @@ def registerUser(request):
                 print("EMAIL SENT SUCCESSFULLY")
             except Exception as e:
                 print(f"EMAIL ERROR: {e}")
+
+                try:
+                    resend.api_key = os.getenv("RESEND_API_KEY")
+
+                    resend.Emails.send({
+                        "from": "onboarding@resend.dev",
+                        "to": [user.email],
+                        "subject": "Welcome to DevSearch",
+                        "html": f"""
+                        <h2>Welcome to DevSearch</h2>
+
+                        <p>Hello {user.username},</p>
+
+                        <p>Your account has been created successfully.</p>
+
+                        <p>Thank you for joining DevSearch.</p>
+                        """
+                    })
+
+                except Exception as e:
+                    print("EMAIL ERROR:", e)
 
                 messages.success(
                     request,
